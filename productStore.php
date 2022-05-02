@@ -1,18 +1,9 @@
 <?php
-
+// This page is probably redundant
+// TODO shift this into connections
 class productStore 
 {
-	// Search is incomplete
-	public function search($query) {
-		require_once 'connections.php';
-		
-		$connections = new connections();
-		
-		
-		
-		return $connections->getByName($query);
-		
-	} 
+	
 	
 	//Returns every product in the database
 	public function getAll() {
@@ -53,6 +44,7 @@ class productStore
 		}
 	}
 	
+	// 
 	public function login ($user) {
 		require_once 'connections.php';
 		$connections = new connections();
@@ -64,7 +56,17 @@ class productStore
 		}
 	}
 	
-	
+	// Search is incomplete
+	public function search($query) {
+		require_once 'connections.php';
+		
+		$connections = new connections();
+		
+		
+		
+		return $connections->getByName($query);
+		
+	} 
 }
 		
 	

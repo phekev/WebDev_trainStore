@@ -15,12 +15,22 @@
 	<!-- Link to the CSS file for this page -->
 	<link rel="stylesheet" type="text/css" href="login_style.css"  />
 	<title>Login</title>
+	
+	<!-- Connect to the database -->
+	<!-- Get all existing usernames -->
+	<!-- Put them in an array -->
+	<!-- Convert array to JS at bottom of page -->
 	<?php
 		require_once 'connections.php';
 		$conn = new connections();
 		$data = $conn->getUsernames();	
-		
-		$row = $data->fetch_assoc();
+		$array = array();
+		$count = 0;
+		while($row = $data->fetch_assoc()) {
+			$array[$count] = $row['Username'];
+			$count++;
+		}
+	
 	?>
 </head>
 
@@ -50,6 +60,7 @@
 									<form id="login-form" action="login.php" method="POST" role="form" style="display: block;">
 										<div class="form-group">
 											<input type="text" name="username" id="username" tabindex="1" class="form-control" placeholder="Username" value="">
+											
 										</div>
 										<div class="form-group">
 											<input type="password" name="password" id="password" tabindex="2" class="form-control" placeholder="Password">
@@ -64,23 +75,25 @@
 									</form>
 									<form id="register-form" action="register.php" method="POST" role="form" style="display: none;">
 										<div class="form-group">
-											<input type="text" name="username" id="username" tabindex="1" class="form-control" placeholder="Username" value="" required>
+											<input type="text" name="r_username" id="r_username" tabindex="1" class="form-control" placeholder="Username" value="" required>
+											<button type="button" id="checkUsername" class="btn btn-info">Check Username</button> 
 										</div>
 										<div class="form-group">
 											<input type="email" name="email" id="email" tabindex="1" class="form-control" placeholder="Email Address" value="" required>
 										</div>
 										<div class="form-group">
-											<input type="password" name="password" id="password" tabindex="2" class="form-control" placeholder="Password" onChange="onChange()" required>
+											<input type="password" name="r_password" id="r_password" tabindex="2" class="form-control" placeholder="Password" onkeyup='checkPasswords()' required>
+											<span id='message'></span>
 										</div>
 										<div class="form-group">
-											<input type="password" name="confirm-password" id="confirm-password" tabindex="2" class="form-control" placeholder="Confirm Password" onChange="onChange()" required>
-											<span id='error_msg'></span>
+											<input type="password" name="confirm-password" id="confirm-password" tabindex="2" class="form-control" placeholder="Confirm Password" onkeyup='checkPasswords()' required>
+											<span id='message'></span>
 										</div>
 										<div class="form-group">
-											<input type="text" name="first-name" id="first-name" tabindex="3" class="form-control" placeholder="First Name" required>
+											<input type="text" name="first-name" id="first-name" tabindex="3" class="form-control" placeholder="First Name" >
 										</div>
 										<div class="form-group">
-											<input type="text" name="last-name" id="last-name" tabindex="3" class="form-control" placeholder="Last Name" required>
+											<input type="text" name="last-name" id="last-name" tabindex="3" class="form-control" placeholder="Last Name" >
 										</div>
 										<div class="form-group">
 											<input type="text" name="address1" id="address1" tabindex="4" class="form-control" placeholder="Apartment / House No.">
@@ -148,19 +161,45 @@
 
 </html>
 
-<script>
-	
+
+
 
 <script type="text/javascript">
 
-    var jArray = <?php echo json_encode($row); ?>;
+	//	Use json_encode to convert the php array to javascript array
+	//	Use this array to check if a username alreay exists when registering a new user
 
-    for(var i=0; i<jArray.length; i++){
-        alert(jArray[i]);
-    }
-
+	// Cycle through each name in the nameArray and compare it to the users preferred username
+	// Eitherway give an alert to say if the name is ok or not
+    var nameArray = <?php echo json_encode($array); ?>;
+	document.getElementById('checkUsername').onclick = function checkUsername() {
+		for(let i=0; i < nameArray.length; i++) {
+			if (document.getElementById('r_username').value == nameArray[i]){
+				alert("This username " + document.getElementById('r_username').value + " is already taken");
+				return;
+			}	
+		}
+		alert("Username is available :)");
+	}
+   
+	// Compare the 2 passwords and say if they match or not
+	var checkPasswords = function() {
+		const submit =  document.getElementById('register-submit');
+		if (document.getElementById('r_password').value ==
+			document.getElementById('confirm-password').value) {
+				// If passwords match you can submit
+				submit.disabled = false;									
+				document.getElementById('message').style.color = 'green';
+				document.getElementById('message').innerHTML = 'Passwords match';
+			} else {
+				// If passwords DO NOT match you cannot submit the form
+				submit.disabled = true;										
+				document.getElementById('message').style.color = 'red';
+				document.getElementById('message').innerHTML = 'Passwords do not match';
+		}
+	}
  </script>
 
    
-  </script>
+
  <script src="login_js.js"></script> 

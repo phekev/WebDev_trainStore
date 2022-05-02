@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <!-- Bootstrap CSS -->
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js" integrity="sha384-IQsoLXl5PILFhosVNubq5LC7Qb9DXgDA9i+tQ8Zj3iwWAwPtgFTxbJ8NT4GN1R8p" crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.min.js" integrity="sha384-cVKIPhGWiC2Al4u+LWgxfKTRIcfu0JTxR+EQDz/bgldoEyl4H0zUF0QKbrJ0EcQF" crossorigin="anonymous"></script>
+
+	<title>Purchase Page</title>
+<style>
+	.container  {
+		font-family: cambria;
+		font-size: 1.5em;
+		margin: auto;
+		width: 60%;
+	}
+
+table {
+  table-layout: fixed;
+  width: 100%;
+  border-collapse: collapse;
+  border: 3px solid purple;
+}
+
+thead th:nth-child(1) {
+  width: 30%;
+}
+
+thead th:nth-child(2) {
+  width: 20%;
+}
+
+thead th:nth-child(3) {
+  width: 15%;
+}
+
+thead th:nth-child(4) {
+  width: 35%;
+}
+
+th, td {
+  padding: 20px;
+}
+	td {
+			min-width: 5em;
+			border: 1px
+	}
+	h3 {
+		margin: auto;	
+	}
+
+</style>
+	
+<body>
+
+<div class="container" id="div1">
+<h3>Your order summary is:</h3>
+	<TABLE id="orderTable" class="table-striped" >
+		<TR>
+			<Th>ID</th>
+			<Th>Name</th>
+			<Th>Price</th>
+			<Th>Quantity</th>
+			<Th>Total</Th>
+		</TR>
+		
+		<tfoot>
+			<tr>
+				<td></td>
+				<td></td>
+				<td></td>
+				<td></td>
+				<td valign="bottom" align="right">
+				<button type="button" class="btn btn-secondary btn-lg active btn-block w-20" >
+				Purchase
+				</button>
+				</td>
+			</tr>
+		</tfoot>
+	</TABLE>	
+
+</div>
+
+</body>
+</html>
+
+
+<script>
+
+
+console.log(localStorage);
+var minProdID = 1000;
+var maxProdID = 1050;
+var grandTotal = 0;
+var array = Array();
+for (var i=0; i<localStorage.length; i++) {
+			var key = localStorage.key(i);
+			var value = localStorage.getItem(key);
+			var rowCount = 1;
+			var arrayCounter=0;
+			if (key > minProdID && key < maxProdID) {
+				var jpar = JSON.parse(localStorage.getItem(key));
+				var tot = jpar.price * jpar.quantity;
+				var total = tot.toFixed(2);
+				
+				var table = document.getElementById('orderTable');
+				
+				
+					var tr = document.createElement('tr');   
+					
+					var td1 = document.createElement('td');
+					var td2 = document.createElement('td');
+					var td3 = document.createElement('td');
+					var td4 = document.createElement('td');
+					var td5 = document.createElement('td');
+					
+					var text1 = document.createTextNode(jpar.id);
+					var text2 = document.createTextNode(jpar.name);
+					var text3 = document.createTextNode(jpar.price);
+					var text4 = document.createTextNode(jpar.quantity);
+					var text5 = document.createTextNode(total);
+					
+					td5.setAttribute('style', 'color: red');
+					td1.appendChild(text1);
+					td2.appendChild(text2);
+					td3.appendChild(text3);
+					td4.appendChild(text4);
+					td5.appendChild(text5);
+					
+					
+					tr.appendChild(td1);
+					tr.appendChild(td2);
+					tr.appendChild(td3);
+					tr.appendChild(td4); 
+					tr.appendChild(td5);
+					
+					table.appendChild(tr);
+				
+					document.body.appendChild(table);
+					
+					grandTotal += Number(total);
+					
+				}
+			
+			
+}
+
+var tdr = document.createElement('tr');
+var tdx = document.createElement('td');
+var tdy = document.createElement('td');
+var tda = document.createElement('td');
+var tdb = document.createElement('td');
+var tdc = document.createElement('td');
+var tdd = document.createElement('td');
+
+var text0 = document.createTextNode('');
+
+var text1 = document.createTextNode(grandTotal);
+
+tda.appendChild(text0);
+tdb.appendChild(text0);
+tdc.appendChild(text0);
+tdd.appendChild(text0);
+
+tdx.appendChild(text1);
+
+
+tdr.appendChild(tda);
+tdr.appendChild(tdb);
+tdr.appendChild(tdc);
+tdr.appendChild(tdd);
+tdr.appendChild(tdx);
+
+table.appendChild(tdr);
+
+
+</script>
