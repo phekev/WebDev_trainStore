@@ -16,7 +16,6 @@
 	<!-- Link to the code in productStore.php -->
 	<?php
 		require_once 'productStore.php';
-	
 	?>
 	
 	
@@ -148,12 +147,13 @@
 		
 		$product = $_POST['id'];	//Gets the ProdID passed from main page
 		$store = new productStore();
-		$data = $store->getByID($product);
+		$data = $store->getByID($product);	//Get the data for the ProdID from the database
 		
 	
 		
 		
-		//Carousel showing 4 images of the product selected. If the image doesn't exist a default NO-IMAGE image is shown
+		// Carousel showing 4 images of the product selected. If the image doesn't exist a default NO-IMAGE image is shown
+		// The images have a standard naming convention *ProdID*_(A/L/F/R).jpg
 		while($row = $data->fetch_assoc()) {
 				
 					echo "<div id='carouselExampleControls' class='carousel slide col-md-6 center column' data-bs-ride='carousel'  data-bs-interval='1200' >";
@@ -185,6 +185,7 @@
 							echo "<h5 class='desc'>" . $row['Desc'] . "</h5>";
 						echo "</p>";
 					echo "</div>";	
+		// Create an with the ProductID, Name & Price
 		$array = array(
 					$row['ProdID'],
 					$row['Name'],
@@ -202,7 +203,7 @@
 				<p>
 					<label class="price" id="price" align="left"></label>
 					<!-- Start of modal -->
-											<!-- Button trigger modal -->
+						<!-- Button trigger modal -->
 						<button type="button" class="btn btn-secondary btn-lg active btn-block w-100" data-bs-toggle="modal" data-bs-target="#cartModal">
 						 ADD TO CART
 						</button>
@@ -232,12 +233,13 @@
 				</p>
 				
 					<!-- Start of modal -->
-											<!-- Button trigger modal -->
+						<!-- Button trigger modal -->
 						<button type="button" class="btn btn-secondary btn-lg active btn-block w-100" data-bs-toggle="modal" data-bs-target="#buyNowModal">
 						 BUY NOW
 						</button>
 					
 						<!-- Modal -->
+						<!-- When the modal closes the user will get redirected to the checkout -->
 						<div class="modal fade" id="buyNowModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true" onclosed="window.location.href='checkout.html';">
 						  <div class="modal-dialog">
 							<div class="modal-content">
@@ -252,7 +254,7 @@
 								 <div class="quantity buttons_added">
 									Quantity<input type="number" id="quantity2" step="1" min="1" max="" name="quantity" value="1" title="Qty" class="input-text qty text" size="4" pattern="" inputmode="">
 								</div>
-								<button type="button" class="btn btn-secondary" data-bs-dismiss="modal" >Close</button>
+								
 								<button type="button" class="btn btn-primary" id="buyButton" data-bs-dismiss="modal" >BUY</button>
 							  </div>
 							</div>
@@ -272,12 +274,13 @@
 
 <script type="text/javascript">
 
-
+	// Use JSON_encode to get from a PHP array to a JS array
     var productArray = <?php echo json_encode($array); ?>;
 	var id = productArray[0];
 	var name = productArray[1];
 	var price = productArray[2];
 	
+	// Use DOM to render product info 
 	document.getElementById("price").innerHTML = "€" + price;	
 	document.getElementById("addToCartTitle").innerHTML = name;
 	document.getElementById("buyNowTitle").innerHTML = name;
@@ -286,12 +289,22 @@
 	
 	// Add the product info and quantity to localStorage as an object 
 	var addToCartFunc = function addToCart() {
+		// So, the same id="quantity" is used for the addToCart and buyNow modals
+		// Use Math.max to get which of them has the quantity value
 		var quantity = Math.max(document.getElementById("quantity").value, document.getElementById("quantity2").value);
+		
+		// Create an object named product with the following properties
+		// product.id
+		// product.name
+		// product.price
+		// product.quantity
 		var product = {id: id, name: name, price: price, quantity: quantity};
+		
 		// If the product is already in localStorage delete it and add it back with the new quantity
 		// This is essentially updating the quantity field
 		if (localStorage.getItem(id) != null) {
 			localStorage.removeItem(id);
+			// localStorage can only store strings - using JSON.stringify to ensure everything is stored correctly
 			localStorage.setItem(id, JSON.stringify(product));
 		} else {
 			localStorage.setItem(id, JSON.stringify(product));
@@ -307,10 +320,7 @@
 		window.location.href = "checkout.html"  
 		})
 	});
-	
-	
 
-	
  </script>
 
 

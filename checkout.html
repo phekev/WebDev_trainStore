@@ -11,78 +11,111 @@
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.min.js" integrity="sha384-cVKIPhGWiC2Al4u+LWgxfKTRIcfu0JTxR+EQDz/bgldoEyl4H0zUF0QKbrJ0EcQF" crossorigin="anonymous"></script>
 
 	<title>Purchase Page</title>
+	<!--
 <style>
-	.container  {
+	/* Basic page layout, 3 columns */
+	/* Set font and font size also */
+	.container-fluid  {
+		display: grid;
+		grid-template-columns: 25% 50% 25%;
 		font-family: cambria;
 		font-size: 1.5em;
-		margin: auto;
-		width: 60%;
-	}
-
-table {
-  table-layout: fixed;
-  width: 100%;
-  border-collapse: collapse;
-  border: 3px solid purple;
-}
-
-thead th:nth-child(1) {
-  width: 30%;
-}
-
-thead th:nth-child(2) {
-  width: 20%;
-}
-
-thead th:nth-child(3) {
-  width: 15%;
-}
-
-thead th:nth-child(4) {
-  width: 35%;
-}
-
-th, td {
-  padding: 20px;
-}
-	td {
-			min-width: 5em;
-			border: 1px
-	}
-	h3 {
-		margin: auto;	
-	}
-
-</style>
-	
-<body>
-
-<div class="container" id="div1">
-<h3>Your order summary is:</h3>
-	<TABLE id="orderTable" class="table-striped" >
-		<TR>
-			<Th>ID</th>
-			<Th>Name</th>
-			<Th>Price</th>
-			<Th>Quantity</th>
-			<Th>Total</Th>
-		</TR>
 		
-		<tfoot>
-			<tr>
-				<td></td>
-				<td></td>
-				<td></td>
-				<td></td>
-				<td valign="bottom" align="right">
-				<button type="button" class="btn btn-secondary btn-lg active btn-block w-20" >
-				Purchase
-				</button>
-				</td>
-			</tr>
-		</tfoot>
-	</TABLE>	
+	}
+	
+	/* div2 has the content */
+	.div2 {
+		
+	
+	
+	}
+	 /* These are for spacing */
+	.div1 .div3 {
+		
+	
+	}
+	
+	
+	
+	table {
+	
+	  table-layout: fixed;
+	  
+	border-collapse: collapse; 
+	border: 3px solid purple;
+	}
+	/* In the table the 1st column will be 15% of the table width */
+	thead th:nth-child(1) {
+	  width: 15%;
+	}
 
+	thead th:nth-child(2) {
+	  width: 20%;
+	}
+
+	thead th:nth-child(3) {
+	  width: 15%;
+	}
+
+	thead th:nth-child(4) {
+	  width: 15%;
+	}
+	/* And so on, until the last column with the totals is 35% of the table width */
+	thead th:nth-child(5) {
+	  width: 35%;
+	}
+
+	th, td {
+	  padding: 1em;
+	  min-width: 5em;
+		border: 3px;
+	}
+	
+	h3 {
+		/*margin: auto;*/	
+	}
+</style>
+	-->
+<body>
+<div class="container-fluid">
+	<div class="div1 col-md-3">
+		<p> div1 </p>
+	</div>
+	
+	<div class="div2 col-md-6" id="div2"  style="overflow:auto" >
+		<h3>Your order summary is:</h3>
+		<TABLE id="orderTable" class="table table-striped" >
+			<thead>
+				<tr>
+					<td>ID</td>
+					<td>Name</td>
+					<td>Price</td>
+					<td>Quantity</td>
+					<td>Total</td>
+				</tr>
+			</thead>
+			
+			
+			<tfoot>
+				<tr>
+					<td></td>
+					<td></td>
+					<td></td>
+					<td></td>
+					<td valign="bottom" align="right">
+					<form id='purchaseForm' method='POST' action='purchase.php'>		
+						<input type='hidden' name='purchaseButton' value=''>
+						<input class='submit' type='submit' value='PURCHASE'>
+					</form>
+					</td>
+				</tr>
+			</tfoot>
+		</TABLE>	
+	</div>
+	
+	<div class="div3 col-md-3">
+		<p> div3</p>
+	</div>
 </div>
 
 </body>
@@ -90,26 +123,37 @@ th, td {
 
 
 <script>
+/*
+*	Iterate through localStorage 
+*	If a key >= 1000 && key <= 1050 it is a product(Products have IDs in the range 1000-1028)
+*	Use JSON.parse to convert the value back into an object
+*	Get the ID, name, price & quantity from the object
+*	Use document.createElement to render a table row using this data
+*	Add the total (price * quantity) to the grandTotal
+*	Repeat this for each item in localStorage which satifies the IF condition
+*	Finally, add a row to render the grandTotal
+*	
+*/
 
-
-console.log(localStorage);
 var minProdID = 1000;
 var maxProdID = 1050;
 var grandTotal = 0;
-var array = Array();
+var purchaseArray = Array();
 for (var i=0; i<localStorage.length; i++) {
 			var key = localStorage.key(i);
 			var value = localStorage.getItem(key);
 			var rowCount = 1;
 			var arrayCounter=0;
-			if (key > minProdID && key < maxProdID) {
+			if (key >= minProdID && key <= maxProdID) {
 				var jpar = JSON.parse(localStorage.getItem(key));
+				purchaseArray.push(jpar);
 				var tot = jpar.price * jpar.quantity;
 				var total = tot.toFixed(2);
 				
 				var table = document.getElementById('orderTable');
 				
-				
+					var tbody = document.createElement('tbody'); 
+					
 					var tr = document.createElement('tr');   
 					
 					var td1 = document.createElement('td');
@@ -120,11 +164,11 @@ for (var i=0; i<localStorage.length; i++) {
 					
 					var text1 = document.createTextNode(jpar.id);
 					var text2 = document.createTextNode(jpar.name);
-					var text3 = document.createTextNode(jpar.price);
+					var text3 = document.createTextNode('€' + jpar.price);
 					var text4 = document.createTextNode(jpar.quantity);
-					var text5 = document.createTextNode(total);
+					var text5 = document.createTextNode('€ ' + total);
 					
-					td5.setAttribute('style', 'color: red');
+					
 					td1.appendChild(text1);
 					td2.appendChild(text2);
 					td3.appendChild(text3);
@@ -138,7 +182,8 @@ for (var i=0; i<localStorage.length; i++) {
 					tr.appendChild(td4); 
 					tr.appendChild(td5);
 					
-					table.appendChild(tr);
+					tbody.appendChild(tr);
+					table.appendChild(tbody);
 				
 					document.body.appendChild(table);
 					
@@ -159,7 +204,8 @@ var tdd = document.createElement('td');
 
 var text0 = document.createTextNode('');
 
-var text1 = document.createTextNode(grandTotal);
+var text1 = document.createTextNode('Grand Total € ' + grandTotal.toFixed(2));
+
 
 tda.appendChild(text0);
 tdb.appendChild(text0);
@@ -167,6 +213,7 @@ tdc.appendChild(text0);
 tdd.appendChild(text0);
 
 tdx.appendChild(text1);
+tdx.setAttribute('style', 'color: red');
 
 
 tdr.appendChild(tda);
@@ -176,6 +223,12 @@ tdr.appendChild(tdd);
 tdr.appendChild(tdx);
 
 table.appendChild(tdr);
+
+console.log(purchaseArray);
+console.log(JSON.stringify(purchaseArray));
+
+myForm = document.forms['purchaseForm'];
+myForm.elements['purchaseButton'].value = JSON.stringify(purchaseArray);
 
 
 </script>

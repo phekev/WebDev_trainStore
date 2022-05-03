@@ -5,21 +5,15 @@
 	
 	require_once 'connections.php';
 		
-	$username=$_POST['r_username'];
-	$pass=$_POST['r_password'];
-	$confirmPass=$_POST['confirm-password'];
-	$email = $_POST['email'];
-	$fName = $_POST['first-name'];
-	$lName = $_POST['last-name'];
-	$address1 = $_POST['address1'];
-	$address2 = $_POST['address2'];
-	$address3 = $_POST['address3'];
-	$county = $_POST['county'];
+	$array=json_decode($_POST['purchaseButton']);
 	
-	$register = new newUser();
-	$register->checkIfUsernameExists ($username);	
-	$register->checkIfPasswordsMatch ($pass, $confirmPass);
-	$register->addNewUser ($username, $pass, $fName, $lName, $email, $address1, $address2, $address3, $county);
+	var_dump($array);
+
+	
+	//$register = new newUser();
+	//$register->checkIfUsernameExists ($username);	
+	//$register->checkIfPasswordsMatch ($pass, $confirmPass);
+	//$register->addNewUser ($username, $pass, $fName, $lName, $email, $address1, $address2, $address3, $county);
 	
 		
 		
