@@ -14,9 +14,9 @@
 			if($row['Password'] == ($pass)){
 				echo "
 					<script>
-						// Clearing localStorage and then store the username 
+						// Clearing localStorage and then store the CustomerID 
 						localStorage.clear();
-						localStorage.username = '" .$user. "';
+						localStorage.setItem('custID', JSON.stringify('" .$row['CustID']. "'));
 						window.open ('main.php', '_self');
 					</script>";
 				$data -> free_result();
@@ -29,10 +29,5 @@
 					$data -> free_result();
 			}
 		
-		
-		
 
-		
-		
-	
 ?>

@@ -1,4 +1,10 @@
 <!DOCTYPE html>
+<!----- 1. Connect to database and getAll products 													----->
+<!----- 2. Show a row layout of 3 Bootstrap cards in each row, each card will be a product			----->
+<!----- 3. Each card will show a product iamge, which will enlarge on mouse over 					----->
+<!----- 	 They will also have the product name and button to click through for product info 		----->
+<!----- 4. The cards will show for each product in the database automatically using a while loop 	----->
+
 <html lang="en">
   <head>
     <!-- Required meta tags -->
@@ -88,7 +94,7 @@
 		}
 		
 		/*
-		* Show main product photo
+		* Show main product image. The image will be in the format *productID*_A.jpg
 		* Print product name
 		* Button to goto product page
 		*/

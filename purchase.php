@@ -7,13 +7,113 @@
 		
 	$array=json_decode($_POST['purchaseButton']);
 	
-	var_dump($array);
-
 	
-	//$register = new newUser();
-	//$register->checkIfUsernameExists ($username);	
-	//$register->checkIfPasswordsMatch ($pass, $confirmPass);
-	//$register->addNewUser ($username, $pass, $fName, $lName, $email, $address1, $address2, $address3, $county);
+	$thisOrder = new newOrder();
+	$orderID = $thisOrder->addAnOrderToDatabase ($array);	
+	$thisOrder->addProductDetailsToOrderDetails ($array, $orderID);
+
+
+class newOrder {
+	
+	// The username object was getting added to the end $array. 
+	// So it has to be retrieved seperately and before accessing the products
+	// Using property_exists to get back the value associated with 'username'
+	public function addAnOrderToDatabase ($array) {
+		for($i = 0; $i < count($array); $i++) {
+			if(property_exists($array[$i], "custID")) {
+				$custID = $array[$i]->custID;
+				echo 'custID.... ' . $custID;
+				$orderID = $this->addNewOrder($custID);
+				break;
+			}
+		}
+		return $orderID;
+	}
+	
+	
+	/*
+	function getOrderID () {
+		$conn = new connections();
+		$orderID = mysqli_insert_id($conn);
+		$data = $conn->getLastInsertID();
+		while($row = $data->fetch_assoc())	{
+			$orderID = $row['OrderID'];
+		}
+		return $orderID;
+	}
+	*/	
+	// Add the new order to the orders table
+	// Then move on to the main site
+	function addNewOrder($custID) {
+		$connection = new mysqli("localhost", "root", "", "g00228349");
+			
+		if(mysqli_connect_errno()){
+			die("DB connection failed: " .
+				mysqli_connect_error() .
+					" (". mysqli_connect_errno() . ")"
+				);
+		}
+		
+		if (!$connection)
+		{
+			die('Could not connect: ' . mysqli_error());
+		}
+		$date = date("d/m/Y");
+		$query = "INSERT INTO g00228349.orders (CustID, OrderDate)VALUES('$custID', '$date')";
+		$connection->query($query);
+		$orderID = mysqli_insert_id($connection);
+		//$orderID = $connection->insert_id();
+		echo '    OrferID..... ' . $orderID;
+        if(mysqli_query($connection,$query)){
+        }
+        else {
+            $msg = "Error ordering at orders table";
+			echo $msg;
+		}
+		return $orderID;
+	}
+	
+	// Iterate over each product being purchased 
+	public function addProductDetailsToOrderDetails ($array, $orderID) {
+		for($i = 0; $i < count($array); $i++) {
+			if (property_exists($array[$i], "id") ) {
+				$id = $array[$i]->id;
+				$price = $array[$i]->price;
+				$quantity = $array[$i]->quantity;
+				$total = $array[$i]->price * $array[$i]->quantity;
+				$this->addOrderDetails($orderID, $id, $price, $quantity, $total);
+			}
+		}
+	}
+	
+	public function addOrderDetails ($orderID, $id, $price, $quantity, $total) {
+		$connection = new mysqli("localhost", "root", "", "g00228349");
+			
+		if(mysqli_connect_errno()){
+			die("DB connection failed: " .
+				mysqli_connect_error() .
+					" (". mysqli_connect_errno() . ")"
+				);
+		}
+		
+		if (!$connection)
+		{
+			die('Could not connect: ' . mysqli_error());
+		}
+		$query = "INSERT INTO g00228349.orders_details (OrderID, ProdID, Price, Quantity, Total)VALUES('$orderID','$id','$price','$quantity','$total')";
+		echo $query;
+		if(mysqli_query($connection,$query)){
+        }
+        else {
+            $msg = "Error ordering at orders_details";
+			echo $msg;
+		}
+		
+	}
+	
+}	
+	
+	
 	
 		
 		

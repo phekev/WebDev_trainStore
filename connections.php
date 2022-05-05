@@ -66,7 +66,7 @@ class connections
 				die('Could not connect: ' . mysqli_error());
 			}
 			
-			$query = "SELECT Username,Password FROM g00228349.customers WHERE Username = '$name'";
+			$query = "SELECT Username,Password, CustID FROM g00228349.customers WHERE Username = '$name'";
 				
 				$result = $connection->query($query);
 				return $result;
@@ -121,7 +121,31 @@ class connections
 			$result = $connection->query($query);
 			return $result;
 		}
-
+		
+		public function getLastInsertID() {
+			$connection = new mysqli("localhost", "root", "", "g00228349");
+			
+			if(mysqli_connect_errno()){
+				die("DB connection failed: " .
+					mysqli_connect_error() .
+						" (". mysqli_connect_errno() . ")"
+					);
+			}
+		
+			if (!$connection)
+			{
+				die('Could not connect: ' . mysqli_error());
+			}
+			
+			$query = "SELECT LAST_INSERT_ID() FROM g00228349.orders";
+			$result = $connection->query($query);
+			return $result;
+			
+		}
+	
+		
+	
+		
 }
 ?>
 

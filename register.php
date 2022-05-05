@@ -1,7 +1,8 @@
 <?php
 	//1. Check if the username already exists (If the user didn't check at registration)
-	//2. Check if the passwords match (Again, this was highlighted on the registration page but you can still submit with non-matching passwords
+	//2. Check if the passwords match (Again, this was highlighted on the registration page. This is redundant but this was written first, so it get let in...)
 	//3. Add the new user to the customer database
+	//4. Add CustID to localStorage and redirect to main page
 	
 	require_once 'connections.php';
 		
@@ -74,6 +75,9 @@ class newUser {
             echo "
 				<script>
 					alert('You are now registered');
+					// Clearing localStorage and then store the CustomerID 
+					localStorage.clear();
+					localStorage.setItem('custID', JSON.stringify('" .$row['CustID']. "'));
 					window.open ('main.php', '_self');
 				</script>";
         }

@@ -320,6 +320,8 @@
 		window.location.href = "checkout.html"  
 		})
 	});
+	
+	
 
  </script>
 
