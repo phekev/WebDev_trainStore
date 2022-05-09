@@ -72,12 +72,14 @@ class newUser {
 			}
 		$query = "INSERT INTO g00228349.customers (Username ,Password , F_Name, L_Name, Email, Address1, Address2, Address3, County)VALUES('$username', '$pass', '$fName', '$lName', '$email', '$address1', '$address2', '$address3', '$county')";
         if(mysqli_query($connection,$query)){
+			$custID = mysqli_insert_id($connection);
+			
             echo "
 				<script>
 					alert('You are now registered');
 					// Clearing localStorage and then store the CustomerID 
 					localStorage.clear();
-					localStorage.setItem('custID', JSON.stringify('" .$row['CustID']. "'));
+					localStorage.setItem('custID', JSON.stringify('" .$custID. "'));
 					window.open ('main.php', '_self');
 				</script>";
         }
@@ -89,6 +91,9 @@ class newUser {
 		
 	
 }
+		
+	
+
 		
 		
 	

@@ -14,9 +14,9 @@
     <!-- Bootstrap CSS -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous">
 	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
-    <title>Hello, world!</title>
+    <title>Train Store</title>
 	<?php
-		require_once 'productStore.php';
+		require_once 'connections.php';
 	?>
 	
 	 <style type="text/css">
@@ -58,23 +58,33 @@
 	.zoom:hover {
 		transform: scale(1.1); /* (110% zoom - Note: if the zoom is too large, it will go outside of the viewport) */
 	}
+	
+	.pageTitle {
+		text-align: center;
+		font-sixe: 3em;
+		background: inherit;
+		padding-bottom: 1.5em;
+	}
   </style>
   
   </head>
   <body>
-    <h1>Train Store</h1>
+  
 
     <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.10.2/dist/umd/popper.min.js" integrity="sha384-7+zCNj/IqJ95wo16oMtfsKbZ9ccEh31eOz1HGyDuCQ6wgnyJNSYdrPa03rtR1zdB" crossorigin="anonymous"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.min.js" integrity="sha384-QJHtvGhmr9XOIpI6YVutG+2QOK9T+ZnN4kzFN1RtK3zEFEIsxhlmWl5/YESvpZ13" crossorigin="anonymous"></script>
   
  <div class="py-5 grad">
+	<div class="pageTitle">
+    <h1>Train Store</h1>
+  </div>
 	<div class="container">
 	
 	<?php
 	session_start();
 	
-	$store = new productStore();
-	$data = $store->getAll();	//Get every product from the product table
+	$connection = new connections();
+	$data = $connection->getAll();	//Get every product from the product table
 	$count = 0;
 	$newRow = true; //Start a new row
 	

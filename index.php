@@ -13,6 +13,7 @@
 	
 	
 	<!-- Link to the CSS file for this page -->
+	
 	<link rel="stylesheet" type="text/css" href="login_style.css"  />
 	<title>Login</title>
 	
@@ -38,7 +39,7 @@
 <!------ Source https://bootsnipp.com/snippets/z1Bpy -->
 
 
-<body>
+<body style="background-color: lightblue;">
 	<div class="container container-login">
 			<div class="row">
 				<div class="col-md-6 col-md-offset-3">
@@ -76,10 +77,11 @@
 									<form id="register-form" action="register.php" method="POST" role="form" style="display: none;">
 										<div class="form-group">
 											<input type="text" name="r_username" id="r_username" tabindex="1" class="form-control" placeholder="Username" value="" required>
-											<button type="button" id="checkUsername" class="btn btn-info">Check Username</button> 
+											<button type="button" id="checkUsername" class="btn btn-info">Check Username Availability</button> 
 										</div>
 										<div class="form-group">
 											<input type="email" name="email" id="email" tabindex="1" class="form-control" placeholder="Email Address" value="" required>
+											<h2 id="result"></h2>
 										</div>
 										<div class="form-group">
 											<input type="password" name="r_password" id="r_password" tabindex="2" class="form-control" placeholder="Password" onkeyup='checkPasswords()' required>
@@ -144,7 +146,7 @@
 										<div class="form-group">
 											<div class="row">
 												<div class="col-sm-6 col-sm-offset-3">
-													<input type="submit" name="register-submit" id="register-submit" tabindex="5" class="form-control btn btn-register" value="Register Now">
+													<input type="submit" name="register-submit" id="register-submit" tabindex="5" class="form-control btn btn-register" onclick='validateEmail(document.register-form.email)' value="Register Now">
 												</div>
 											</div>
 										</div>
@@ -198,6 +200,32 @@
 				document.getElementById('message').innerHTML = 'Passwords do not match';
 		}
 	}
+	
+	//	Source https://stackoverflow.com/questions/46155/how-can-i-validate-an-email-address-in-javascript
+	//	Using regex magic and arrow functions to ensure an @ (at) sign and a . (dot) plus some other checks
+	const validateEmail = (email) => {
+		return email.match(
+			/^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
+		);
+	};
+
+	const validate = () => {
+		const $result = $('#result');
+		const email = $('#email').val();
+		$result.text('');
+
+		if (validateEmail(email)) {
+			$result.text(email + ' is valid :)');
+			$result.css('color', 'green');
+		} else {
+		$result.text(email + ' is not valid :(');
+		$result.css('color', 'red');
+		}
+	return false;
+	}
+
+	$('#email').on('input', validate);
+
  </script>
 
    

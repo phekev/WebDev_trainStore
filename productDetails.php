@@ -13,9 +13,9 @@
 	
 	<title>Product Page</title>
 	
-	<!-- Link to the code in productStore.php -->
+	<!-- Link to the code in connections.php -->
 	<?php
-		require_once 'productStore.php';
+		require_once 'connections.php';
 	?>
 	
 	
@@ -89,12 +89,15 @@
 	padding: 10px;
 	height: 100%;
 	}
+	/* Was having an issue with a white band across bottom of screen so setting height, margin & padding to solve this */
 	html, body {
 		background-color: lightblue;
 		height: 100%;
 		margin: 0px;
 		padding: 0px;
 	}
+	
+	/* Gradient */
 	.grad {
 		height: 100%;
 		font-family: cambria;
@@ -103,6 +106,7 @@
 	.title {
 		font-size: 3em;
 	}
+	
 	.desc, .price{
 		float: left;
 		font-size: 1.5em;
@@ -118,6 +122,7 @@
 		display:block;
 
 	}
+	/* Just here for spacing*/
 	.blankSpace{
 		height:70%;
 	}
@@ -133,8 +138,7 @@
 	<div class="container-fluid parent"> 
 		<div class="left column col-md-3">
 			<p> 
-				<h5>Home</h5>
-				<h4>Checkout</>
+				
 			</p>
 		</div>
 
@@ -146,8 +150,8 @@
 		<?php
 		
 		$product = $_POST['id'];	//Gets the ProdID passed from main page
-		$store = new productStore();
-		$data = $store->getByID($product);	//Get the data for the ProdID from the database
+		$connection = new connections();
+		$data = $connection->getByID($product);	//Get the data for the ProdID from the database
 		
 	
 		

@@ -63,7 +63,7 @@
 	thead th:nth-child(5) {
 	  width: 35%;
 	}
-
+	
 	th, td {
 	  padding: 1em;
 	  min-width: 5em;
@@ -75,7 +75,7 @@
 	}
 </style>
 	
-<body>
+<body style="background-color: lightblue;">
 <div class="container-fluid">
 	<div class="div1 col-md-3">
 		<p> </p>
@@ -90,7 +90,7 @@
 					<td>Name</td>
 					<td>Price</td>
 					<td>Quantity</td>
-					<td>Total</td>
+					<td>Subtotal</td>
 				</tr>
 			</thead>
 			
@@ -132,9 +132,7 @@
 *	Add the total (price * quantity) to the grandTotal
 *	Repeat this for each item in localStorage which satifies the IF condition
 *	Finally, add a row to render the grandTotal
-*	
 */
-
 var minProdID = 1000;
 var maxProdID = 1050;
 var grandTotal = 0;
@@ -230,8 +228,8 @@ var text1 = document.createTextNode('Grand Total € ' + grandTotal.toFixed(2));
 tda.appendChild(text0);
 tdb.appendChild(text0);
 tdc.appendChild(text0);
-tdd.appendChild(text0);
 
+tdx.setAttribute('colspan', 2);
 tdx.appendChild(text1);
 tdx.setAttribute('style', 'color: red');
 
@@ -239,7 +237,7 @@ tdx.setAttribute('style', 'color: red');
 tdr.appendChild(tda);
 tdr.appendChild(tdb);
 tdr.appendChild(tdc);
-tdr.appendChild(tdd);
+
 tdr.appendChild(tdx);
 
 table.appendChild(tdr);

@@ -22,7 +22,6 @@ class newOrder {
 		for($i = 0; $i < count($array); $i++) {
 			if(property_exists($array[$i], "custID")) {
 				$custID = $array[$i]->custID;
-				echo 'custID.... ' . $custID;
 				$orderID = $this->addNewOrder($custID);
 				break;
 			}
@@ -30,18 +29,6 @@ class newOrder {
 		return $orderID;
 	}
 	
-	
-	/*
-	function getOrderID () {
-		$conn = new connections();
-		$orderID = mysqli_insert_id($conn);
-		$data = $conn->getLastInsertID();
-		while($row = $data->fetch_assoc())	{
-			$orderID = $row['OrderID'];
-		}
-		return $orderID;
-	}
-	*/	
 	// Add the new order to the orders table
 	// Then move on to the main site
 	function addNewOrder($custID) {
@@ -62,9 +49,8 @@ class newOrder {
 		$query = "INSERT INTO g00228349.orders (CustID, OrderDate)VALUES('$custID', '$date')";
 		$connection->query($query);
 		$orderID = mysqli_insert_id($connection);
-		//$orderID = $connection->insert_id();
-		echo '    OrferID..... ' . $orderID;
         if(mysqli_query($connection,$query)){
+			
         }
         else {
             $msg = "Error ordering at orders table";
@@ -101,8 +87,12 @@ class newOrder {
 			die('Could not connect: ' . mysqli_error());
 		}
 		$query = "INSERT INTO g00228349.orders_details (OrderID, ProdID, Price, Quantity, Total)VALUES('$orderID','$id','$price','$quantity','$total')";
-		echo $query;
 		if(mysqli_query($connection,$query)){
+			echo "
+				<script>
+					alert('Order placed');
+					window.open ('main.php', '_self');
+				</script>";
         }
         else {
             $msg = "Error ordering at orders_details";
