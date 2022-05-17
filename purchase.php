@@ -32,24 +32,13 @@ class newOrder {
 	// Add the new order to the orders table
 	// Then move on to the main site
 	function addNewOrder($custID) {
-		$connection = new mysqli("localhost", "root", "", "g00228349");
-			
-		if(mysqli_connect_errno()){
-			die("DB connection failed: " .
-				mysqli_connect_error() .
-					" (". mysqli_connect_errno() . ")"
-				);
-		}
-		
-		if (!$connection)
-		{
-			die('Could not connect: ' . mysqli_error());
-		}
+		$connection = new connections();
+		$data = $connection->getConnection();
 		$date = date("d/m/Y");
 		$query = "INSERT INTO g00228349.orders (CustID, OrderDate)VALUES('$custID', '$date')";
-		$connection->query($query);
-		$orderID = mysqli_insert_id($connection);
-        if(mysqli_query($connection,$query)){
+		$data->query($query);
+		$orderID = mysqli_insert_id($data);
+        if(mysqli_query($data,$query)){
 			
         }
         else {
@@ -58,6 +47,8 @@ class newOrder {
 		}
 		return $orderID;
 	}
+	
+	
 	
 	// Iterate over each product being purchased 
 	public function addProductDetailsToOrderDetails ($array, $orderID) {
@@ -73,21 +64,10 @@ class newOrder {
 	}
 	
 	public function addOrderDetails ($orderID, $id, $price, $quantity, $total) {
-		$connection = new mysqli("localhost", "root", "", "g00228349");
-			
-		if(mysqli_connect_errno()){
-			die("DB connection failed: " .
-				mysqli_connect_error() .
-					" (". mysqli_connect_errno() . ")"
-				);
-		}
-		
-		if (!$connection)
-		{
-			die('Could not connect: ' . mysqli_error());
-		}
+		$connection = new connections();
+		$data = $connection->getConnection();
 		$query = "INSERT INTO g00228349.orders_details (OrderID, ProdID, Price, Quantity, Total)VALUES('$orderID','$id','$price','$quantity','$total')";
-		if(mysqli_query($connection,$query)){
+		if(mysqli_query($data,$query)){
 			echo "
 				<script>
 					alert('Order placed');
